@@ -2,6 +2,8 @@
 #include <fstream>
 #include <jsoncpp/json/json.h>
 
+#include "base64.h"
+
 using namespace std;
 int main(int argc, char ** argv)
 {
@@ -28,9 +30,21 @@ int main(int argc, char ** argv)
     {
         cout << "JSON format error!" << endl;
     }
-    string plate = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["imageFile"].asString();
-    string imageFile = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["license"].asString();
+    string plate = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["license"].asString();
+    string imageFile = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["imageFile"].asString();
     
     cout << "Plate\t" << plate << endl;
-    cout << "Image\t" << imageFile << endl;
+    // base64 解码保存文件
+    string jpgFile = base64_decode(imageFile);
+    FILE *fid;
+    fid = fopen("plate.jpg","wb");
+    if(fid == NULL)
+    {
+        printf("写出文件出错");
+    }
+    
+    fwrite(jpgFile.c_str(), jpgFile.length(), 1, fid);
+    
+    fclose(fid);
+    
 }

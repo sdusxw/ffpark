@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <jsoncpp/json/json.h>
+
 using namespace std;
 int main(int argc, char ** argv)
 {
@@ -16,6 +18,19 @@ int main(int argc, char ** argv)
             content += strLine;
         }
     }
+    inFile.close();
+    
     cout << "Content Length:\t" << content.length() << endl;
-    cout << content << endl;
+    Json::Reader reader;
+    Json::Value json_object;
+    
+    if (!reader.parse(content, json_object))
+    {
+        cout << "JSON format error!" << endl;
+    }
+    string plate = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["imageFile"].asString();
+    string imageFile = json_object["AlarmInfoPlate"]["result"]["PlateResult"]["license"].asString();
+    
+    cout << "Plate\t" << plate << endl;
+    cout << "Image\t" << imageFile << endl;
 }

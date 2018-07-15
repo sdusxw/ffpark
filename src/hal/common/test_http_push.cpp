@@ -7,10 +7,11 @@ int main()
     http_server8090.open_bind_listen(8090);
     while(true)
     {
-        std::string push_msg;
-        if(http_server8090.get_message(push_msg))
+        char * msg = NULL;
+        int length;
+        if(http_server8090.get_message(msg, length))
         {
-            std::cout << push_msg << std::endl;
+            printf("Got message with length:\t%d\n%s", length, msg);
         }
         sleep(1);
     }

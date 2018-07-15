@@ -400,7 +400,7 @@ bool NetHttpServer::open_bind_listen(int listen_port)
 	return true;
 }
 
-bool NetHttpServer::get_message(std::string &msg)
+bool NetHttpServer::get_message(char * ptr_msg, int &len_msg)
 {
 	struct sockaddr_in addr;
 	rset = allset;
@@ -461,7 +461,10 @@ bool NetHttpServer::get_message(std::string &msg)
 		int n_http = 0;
 		char *p_http_response = (char *) getHTTPResponse(sockfd, &n_http);
 		if(n_http>0)
-			msg = p_http_response;
+        {
+            ptr_msg = p_http_response;
+            len_msg = n_http;
+        }
 		if(p_http_response)
 			free(p_http_response);
 		close(sockfd);

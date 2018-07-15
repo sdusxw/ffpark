@@ -1,0 +1,52 @@
+1. bled 地址 https://github.com/sdboon/bled 
+分支 hk 支持海康led屏
+分支 lx 支持凌信led屏
+master 
+ouguan 支持 欧冠led屏
+
+
+2 bcenter 地址https://github.com/sdboon/bcenter
+master   通用版本
+ouguan  无效
+wangnengyuyin 支持万能语音版
+wj 		武警消防支队版
+
+3 bgui 地址 https://github.com/sdboon/bgui
+
+分支 master 通用版
+weixinsaoma 微信支付宝扫码版
+
+
+4 bcontrol  地址 https://github.com/sdboon/bcontrol
+
+master 通用版 支持欧冠led所有功能
+norelay  	去掉欧冠led的继电器功能
+noshot 	去掉相机抓拍功能
+noshotrec 		去掉相机抓拍 图片识别功能
+wannengyuyin   	由noshot分支 支持万能语音
+
+5 bipc 地址 	https://github.com/sdboon/bipc
+
+hk 	支持海康相机抓拍识别
+zhongwei 中维相机
+zhongweinoshot 支持中维相机，不抓拍
+
+
+6 bcrypto  地址 https://github.com/sdboon/bcrypto
+
+民用产品加密
+
+7 bvs 地址 https://github.com/sdboon/bvs
+
+分支 	master 主分支，普通视频显示
+norec 	无视频识别
+noshot 	视频识别
+noshotrec   视频识别，不抓拍
+
+8 sync 地址 https://github.com/sdboon/sync 
+
+mongodb 到 mysql 的同步程序
+
+9 LEDVolume   地址 https://github.com/sdboon/LEDVolume
+
+调节欧冠led音量的小程序

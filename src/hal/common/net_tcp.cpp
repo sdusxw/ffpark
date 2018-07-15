@@ -400,7 +400,7 @@ bool NetHttpServer::open_bind_listen(int listen_port)
 	return true;
 }
 
-bool NetHttpServer::get_message(char * ptr_msg, int &len_msg)
+bool NetHttpServer::get_message(char * &ptr_msg, int &len_msg)
 {
 	struct sockaddr_in addr;
 	rset = allset;

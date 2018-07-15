@@ -16,6 +16,12 @@ add_executable(test_http
     test_http_push.cpp
 )
 
+add_executable(test_json_base64
+    test_json_base64.cpp
+)
+
 target_link_libraries(common pthread jpeg jsoncpp)
 
 target_link_libraries(test_http pthread common)
+
+target_link_libraries(test_json_base64 pthread jsoncpp common)

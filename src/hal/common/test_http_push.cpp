@@ -11,7 +11,17 @@ int main()
         int length;
         if(http_server8090.get_message(msg, length))
         {
-            printf("Got message with length:\t%d\n%s", length, msg);
+            printf("Got message with length:\t%d\n", length);
+            FILE *fid;
+            fid = fopen("binary.dat","wb");
+            if(fid == NULL)
+            {
+                printf("写出文件出错");
+            }
+            
+            fwrite(msg, length, 1, fid);
+            
+            fclose(fid);
         }
         sleep(1);
     }

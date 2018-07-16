@@ -19,17 +19,15 @@ set(bin_dir ${PROJECT_BINARY_DIR})
 set(src_dir ${PROJECT_SOURCE_DIR})
 
 set(SOLUTION_INCLUDE_DIRS
-    ${src_dir}/alg
-    ${src_dir}/bipc
-    ${src_dir}/ipc/snapcamera
-    ${src_dir}/ipc/aiocamera
+    ${src_dir}/ffhal
+    ${src_dir}/hal/aio_bc
     ${src_dir}/common
 )
 
 #-------------------------------------------------------------------------------
 #add subdirectories
 
-#add_subdirectory(ffhal)
-#add_subdirectory(hal/aiocamera)
+add_subdirectory(ffhal)
+add_subdirectory(hal/aio_bc)
 add_subdirectory(common)
 

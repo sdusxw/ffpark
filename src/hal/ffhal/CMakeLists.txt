@@ -3,7 +3,7 @@ include_directories(
     ${SOLUTION_INCLUDE_DIRS}
 )
 
-add_executable(bipc
+add_executable(ffhal
     main.cpp
     ipc_config.h
     ipc_config.cpp
@@ -11,16 +11,16 @@ add_executable(bipc
     ipc_controller.cpp
 )
 
-add_executable(trigger
-	trigger.cpp
-)
+#add_executable(trigger
+#	trigger.cpp
+#)
 
-add_executable(test-server
-	test-server.cpp
-)
+#add_executable(test-server
+#	test-server.cpp
+#)
 
-target_link_libraries(bipc jsoncpp common aiocamera)
+target_link_libraries(ffhal jsoncpp common aiocamera)
 
-target_link_libraries(trigger jsoncpp common )
+#target_link_libraries(trigger jsoncpp common )
 
-target_link_libraries(test-server jsoncpp common )
+#target_link_libraries(test-server jsoncpp common )

@@ -13,8 +13,6 @@ void * get_ipc_config(void* para);
 
 int main()
 {
-	//初始化curl环境
-	curl_global_init(CURL_GLOBAL_ALL);
 	//初始化全局变量
 	g_bipc_config_done = false;
 	open_in_queue_a = false;

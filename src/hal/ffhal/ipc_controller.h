@@ -6,8 +6,8 @@
 #include "bglobal.h"
 #include "common.h"
 
-#include "snapcamera.h"
-#include "aiocamera.h"
+//#include "snapcamera.h"
+//#include "aiocamera.h"
 
 /*
  * IPC初始化,开始工作

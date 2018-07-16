@@ -16,12 +16,12 @@ bool ipc_start()
 	if (!g_machine.snap_or_aio) //中维抓拍相机
 	{
 		log_output("[ipc_controller]中维抓拍相机开始工作");
-		result = snap_ipc_start();
+		//result = snap_ipc_start();
 	}
 	if (g_machine.snap_or_aio)	//中维智能相机
 	{
 		log_output("[ipc_controller]中维智能相机开始工作");
-		result = aio_ipc_start();
+		//result = aio_ipc_start();
 	}
 	return result;
 }
@@ -35,7 +35,7 @@ bool close_door(Json::Value json)
 	std::string in_out = json["in_out"].asString();
 	if (!g_machine.snap_or_aio) //中维抓拍相机
 	{
-		result = snap_close_door(channel_id, in_out);
+		//result = snap_close_door(channel_id, in_out);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "落杆成功");
@@ -63,7 +63,7 @@ bool open_door(Json::Value json)
 	std::string flag = json["flag"].asString();
 	if (!g_machine.snap_or_aio) //中维抓拍相机
 	{
-		result = snap_open_door(channel_id, in_out, flag);
+		//result = snap_open_door(channel_id, in_out, flag);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "开闸放行成功");
@@ -76,7 +76,7 @@ bool open_door(Json::Value json)
 	if (g_machine.snap_or_aio)	//中维智能相机
 	{
 		log_output("[ipc_controller]中维智能相机收到开闸命令");
-		result = aio_open_door(channel_id, in_out, flag);
+		//result = aio_open_door(channel_id, in_out, flag);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "开闸放行成功");
@@ -100,7 +100,7 @@ bool snap_shot(Json::Value json)
 	std::string flag = json["flag"].asString();
 	if (!g_machine.snap_or_aio) //中维抓拍相机
 	{
-		result = snap_snap_shot(channel_id, in_out, flag);
+		//result = snap_snap_shot(channel_id, in_out, flag);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "手动抓拍成功");
@@ -112,7 +112,7 @@ bool snap_shot(Json::Value json)
 	}
 	if (g_machine.snap_or_aio) //中维智能相机
 	{
-		result = aio_snap_shot(channel_id, in_out, flag);
+		//result = aio_snap_shot(channel_id, in_out, flag);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "手动抓拍成功");

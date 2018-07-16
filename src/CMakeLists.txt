@@ -24,11 +24,5 @@ set(lib_dir "@PROJECT_BINARY_DIR@")
 SET(EXECUTABLE_OUTPUT_PATH ${bin_dir}/bin)
 SET(LIBRARY_OUTPUT_PATH ${lib_dir}/lib)
 
-set(SOLUTION_INCLUDE_DIRS
-#        ${src_dir}/include
-        ${src_dir}/common
-#        ${src_dir}/utils
-)
-
 # add subdirectories
 add_subdirectory(hal)

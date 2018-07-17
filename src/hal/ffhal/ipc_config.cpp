@@ -104,6 +104,13 @@ bool get_ipc_config(Json::Value json_ipc_config)
 				log_output("[ipc_config]确定为中维智能相机");
 				break;
 			}
+            if (channels[i].devices[j].device_type == "臻识智能相机")
+            {
+                g_machine.snap_or_aio = true;            //(true臻识智能相机)
+                b_determine = true;
+                log_output("[ipc_config]确定为臻识智能相机");
+                break;
+            }
 		}
 	}
 	//确定A通道是否有辅机
@@ -113,7 +120,8 @@ bool get_ipc_config(Json::Value json_ipc_config)
 		for (int i = 0; i < g_machine.channel_a.devices.size(); i++)
 		{
 			if (g_machine.channel_a.devices[i].device_type == "中维抓拍相机"
-					|| g_machine.channel_a.devices[i].device_type == "中维智能相机")
+					|| g_machine.channel_a.devices[i].device_type == "中维智能相机"
+                    || g_machine.channel_a.devices[i].device_type == "臻识智能相机")
 			{
 				sprintf(char_msg, "[ipc_config]A通道发现相机，IP：%s",
 						g_machine.channel_a.devices[i].device_ip_id.c_str());
@@ -143,7 +151,8 @@ bool get_ipc_config(Json::Value json_ipc_config)
 		for (int i = 0; i < g_machine.channel_b.devices.size(); i++)
 		{
 			if (g_machine.channel_b.devices[i].device_type == "中维抓拍相机"
-					|| g_machine.channel_b.devices[i].device_type == "中维智能相机")
+					|| g_machine.channel_b.devices[i].device_type == "中维智能相机"
+                    || g_machine.channel_b.devices[i].device_type == "臻识智能相机")
 			{
 				sprintf(char_msg, "[ipc_config]B通道发现相机，IP：%s",
 						g_machine.channel_b.devices[i].device_ip_id.c_str());
@@ -164,75 +173,6 @@ bool get_ipc_config(Json::Value json_ipc_config)
 			g_machine.channel_b.aux_camera = vec_dev[1];
 			log_output("[ipc_config]B通道有辅机");
 			g_machine.b_aux_camera = true;
-		}
-	}
-	//确定是否有第二继电器
-	if (!g_machine.snap_or_aio)			//中维抓拍相机工况下才需要继电器
-	{
-		if (g_machine.channel_a_enable)
-		{
-			for (int i = 0; i < g_machine.channel_a.devices.size(); i++)
-			{
-				if (g_machine.channel_a.devices[i].device_type == "停车场控制器")
-				{
-					g_machine.channel_a.net_relay =
-							g_machine.channel_a.devices[i];
-					sprintf(char_msg, "[ipc_config]发现停车场控制器，IP：%s",
-							g_machine.channel_a.net_relay.device_ip_id.c_str());
-					log_msg = char_msg;
-					log_output(log_msg);
-					g_machine.a_relay_enable = true;
-				}
-			}
-		}
-		if (g_machine.channel_b_enable)
-		{
-			for (int i = 0; i < g_machine.channel_b.devices.size(); i++)
-			{
-				if (g_machine.channel_b.devices[i].device_type == "停车场控制器")
-				{
-					g_machine.channel_b.net_relay =
-							g_machine.channel_b.devices[i];
-					sprintf(char_msg, "[ipc_config]发现停车场控制器，IP：%s",
-							g_machine.channel_b.net_relay.device_ip_id.c_str());
-					log_msg = char_msg;
-					log_output(log_msg);
-					g_machine.b_relay_enable = true;
-				}
-			}
-		}
-		//只有一个通道使能的工况下，不需要第二继电器
-		//只有两个通道都使能的工况下，才有可能需要第二继电器
-		if (g_machine.channel_a_enable && g_machine.channel_b_enable)
-		{
-			if (g_machine.a_relay_enable && g_machine.b_relay_enable)
-			{
-				if (g_machine.channel_a.net_relay.device_ip_id
-						== g_machine.channel_b.net_relay.device_ip_id)
-				{
-					g_machine.second_relay = false;
-				}
-				else
-				{
-					g_machine.second_relay = true;
-				}
-			}
-			else
-			{
-				g_machine.second_relay = false;
-			}
-		}
-		else
-		{
-			g_machine.second_relay = false;
-		}
-		if (g_machine.second_relay)
-		{
-			log_output("[ipc_config]启用第二继电器");
-		}
-		else
-		{
-			log_output("[ipc_config]没有第二继电器");
 		}
 	}
 	return true;

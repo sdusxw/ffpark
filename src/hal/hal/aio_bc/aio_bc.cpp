@@ -1,4 +1,4 @@
-﻿#include "aiocamera.h"
+#include "aio_bc.h"
 
 #include "base64.h"
 

@@ -19,7 +19,7 @@ add_executable(ffhal
 #	test-server.cpp
 #)
 
-target_link_libraries(ffhal jsoncpp common )
+target_link_libraries(ffhal jsoncpp common aio_bc)
 
 #target_link_libraries(trigger jsoncpp common )
 

@@ -7,7 +7,7 @@ int main()
     http_server8090.open_bind_listen(8090);
     while(true)
     {
-        char * msg = NULL;
+/*        char * msg = NULL;
         int length;
         if(http_server8090.get_message(msg, length))
         {
@@ -23,6 +23,7 @@ int main()
             
             fclose(fid);
         }
+ */
         sleep(1);
     }
 }

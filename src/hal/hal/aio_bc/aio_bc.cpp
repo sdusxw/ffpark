@@ -73,13 +73,6 @@ bool aio_ipc_start()
 	return true;
 }
 /*
- * 落杆命令
- */
-bool aio_close_door(std::string channel_id, std::string in_out)
-{
-	return true;
-}
-/*
  * 开闸命令
  * flag: once表示开一次，keep表示一直开
  */
@@ -182,89 +175,7 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 	}
 	return true;
 }
-/*
- * 手动抓拍
- * flag: 目前只支持once
- */
-bool aio_snap_shot(std::string channel_id, std::string in_out, std::string flag)
-{
-	bool b_connect = false;
-	NetTcpClient tcp_client;
-	char str_msg[1024];
-	std::string log_msg;
-	std::string camera_ip = "";
-	if (in_out == "入口")
-	{
-		camera_ip = g_machine.channel_a.main_camera.device_ip_id;
-	}
-	else
-	{
-		camera_ip = g_machine.channel_b.main_camera.device_ip_id;
-	}
-	if (tcp_client.connect_server(camera_ip, 8127))
-	{
-		sprintf(str_msg, "[AioCamera]连接相机%s的8127端口成功", camera_ip.c_str());
-		log_msg = str_msg;
-		msg_print(log_msg);
-		log_output(log_msg);
-		b_connect = true;
-	}
-	else
-	{
-		sprintf(str_msg, "[AioCamera]连接相机%s的8127端口失败", camera_ip.c_str());
-		log_msg = str_msg;
-		msg_print(log_msg);
-		log_output(log_msg);
-		b_connect = false;
-	}
-	if (b_connect)
-	{
-		Json::Value json_obj;
-		Json::Value json_user;
-		json_user["name"] = Json::Value("admin");
-		json_user["digest"] = Json::Value("3ed07a078ad9d9cec0480d2e9736e14e");
-		json_obj["sentcnt"] = Json::Value(1024);
-		json_obj["user"] = json_user;
-		json_obj["method"] = Json::Value("ivp_lpr_trigger");
-		std::string json_msg = json_obj.toStyledString();
 
-		char str_len[10] = "";
-		sprintf(str_len, "%d", json_msg.length());
-
-		std::string http_header = "POST / HTTP/1.0\r\n";
-		http_header += "Connection: keep-alive\r\n";
-		http_header += "Content-Type: application/json;charset=utf-8\r\n";
-		http_header += "Content-Length: ";
-		http_header = http_header + str_len;
-		http_header += "\r\nHost: 192.168.1.110:8127\r\n\r\n";
-		std::string http_msg = http_header + json_msg;
-		std::string recv_msg;
-		int n = tcp_client.send_data(http_msg, recv_msg);
-		tcp_client.dis_connect();
-		std::cout << recv_msg << std::endl;
-		if (recv_msg.length() > 0)	//有返回的消息
-		{
-
-		}
-	}
-	return true;
-}
-
-/*
- * A通道发送车辆通过信息
- */
-void aio_send_car_pass_a()
-{
-
-}
-
-/*
- * B通道发送车辆通过信息
- */
-void aio_send_car_pass_b()
-{
-
-}
 /*
  * A通道推送车辆识别信息
  */
@@ -344,13 +255,13 @@ bool AioCamera::initialize()
 	char str_msg[1024];
 	std::string log_msg;
 	//根据相机的camera_label来确定端口号
-	//端口分配：A入口主机2350，AA入口辅机2351，B出口主机2352，BA出口辅机2353
+	//端口分配：A入口主机8080，AA入口辅机XXXX，B出口主机8090，BA出口辅机XXXX
 	if (camera_label == "A")
-		listen_port = 2350;
+		listen_port = 8080;
 	else if (camera_label == "AA")
 		listen_port = 2351;
 	else if (camera_label == "B")
-		listen_port = 2352;
+		listen_port = 8090;
 	else if (camera_label == "BA")
 		listen_port = 2353;
 	else
@@ -370,115 +281,6 @@ bool AioCamera::initialize()
 		msg_print(log_msg);
 		log_output(log_msg);
 		return false;
-	}
-
-	//通过TCP 8127端口发送消息，配置接收车牌推送消息HTTP服务器
-	bool b_connect = false;
-	NetTcpClient tcp_client;
-	if (tcp_client.connect_server(camera_ip, 8127))
-	{
-		sprintf(str_msg, "[AioCamera]连接相机%s的8127端口成功", camera_ip.c_str());
-		log_msg = str_msg;
-		msg_print(log_msg);
-		log_output(log_msg);
-		b_connect = true;
-	}
-	else
-	{
-		sprintf(str_msg, "[AioCamera]连接相机%s的8127端口失败", camera_ip.c_str());
-		log_msg = str_msg;
-		msg_print(log_msg);
-		log_output(log_msg);
-		b_connect = false;
-	}
-	if (b_connect)
-	{
-		Json::Value json_obj;
-		Json::Value json_user;
-		json_user["name"] = Json::Value("admin");
-		json_user["digest"] = Json::Value("3ed07a078ad9d9cec0480d2e9736e14e");
-		json_obj["sentcnt"] = Json::Value(1024);
-		json_obj["user"] = json_user;
-		json_obj["method"] = Json::Value("ivp_get_param");
-		std::string json_msg = json_obj.toStyledString();
-
-		char str_len[10] = "";
-		sprintf(str_len, "%d", json_msg.length());
-
-		std::string http_header = "POST / HTTP/1.0\r\n";
-		http_header += "Connection: keep-alive\r\n";
-		http_header += "Content-Type: application/json;charset=utf-8\r\n";
-		http_header += "Content-Length: ";
-		http_header = http_header + str_len;
-		http_header += "\r\nHost: 192.168.1.110:8127\r\n\r\n";
-		std::string http_msg = http_header + json_msg;
-		std::string recv_msg;
-		int n = tcp_client.send_data(http_msg, recv_msg);
-		tcp_client.dis_connect();
-		std::cout << recv_msg << std::endl;
-		if (recv_msg.length() > 0)	//有返回的消息
-		{
-			Json::Reader reader;
-			Json::Value json_object;
-
-			if (!reader.parse(recv_msg, json_object))
-			{
-				//JSON格式错误导致解析失败
-				log_output("[AioCamera]解析失败");
-				return false;
-			}
-			Json::Value json_param = json_object["result"];
-			json_param["channelid"] = Json::Value(0);	//必须带channelid，否则协议不起作用
-			json_param["bIvpLprImgFull"] = Json::Value(true);	//上传全景图
-			json_param["bIvpLprImgLP"] = Json::Value(false);	//不传车牌小图
-			json_param["ivpLprHttpServer"]["ivpLprHttpIP"] = Json::Value(
-					g_ip_addr);
-			json_param["ivpLprHttpServer"]["ivpLprHttpPort"] = Json::Value(
-					listen_port);
-			json_param["ivpLprHttpServer"]["ivpLprHttpAddr"] = Json::Value(
-					"push");
-			json_obj["method"] = Json::Value("ivp_set_param");
-			json_obj["param"] = json_param;
-			json_msg = json_obj.toStyledString();
-
-			sprintf(str_len, "%d", json_msg.length());	//长度必须正确
-			http_header = "POST / HTTP/1.0\r\n";
-			http_header += "Connection: keep-alive\r\n";
-			http_header += "Content-Type: application/json;charset=utf-8\r\n";
-			http_header += "Content-Length: ";
-			http_header = http_header + str_len;
-			http_header += "\r\nHost: 192.168.1.110:8127\r\n\r\n";
-			http_msg = http_header + json_msg;
-
-			sleep(1);
-
-			if (tcp_client.connect_server(camera_ip, 8127))
-			{
-				sprintf(str_msg, "[AioCamera]连接相机%s的8127端口成功",
-						camera_ip.c_str());
-				log_msg = str_msg;
-				msg_print(log_msg);
-				log_output(log_msg);
-				b_connect = true;
-			}
-			else
-			{
-				sprintf(str_msg, "[AioCamera]连接相机%s的8127端口失败",
-						camera_ip.c_str());
-				log_msg = str_msg;
-				msg_print(log_msg);
-				log_output(log_msg);
-				b_connect = false;
-			}
-			if (b_connect)
-			{
-				std::string recv_msg2 = "";
-				std::cout << "http send:\t" << http_msg << std::endl;
-				int n = tcp_client.send_data(http_msg, recv_msg2);
-				tcp_client.dis_connect();
-				std::cout << "http recv:\t" << recv_msg2 << std::endl;
-			}
-		}
 	}
 
 	pthread_t tid_aio_camera_loop;

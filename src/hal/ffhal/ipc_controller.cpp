@@ -18,10 +18,10 @@ bool ipc_start()
 		log_output("[ipc_controller]中维抓拍相机开始工作");
 		//result = snap_ipc_start();
 	}
-	if (g_machine.snap_or_aio)	//中维智能相机
+	if (g_machine.snap_or_aio)	//智能相机
 	{
-		log_output("[ipc_controller]中维智能相机开始工作");
-		//result = aio_ipc_start();
+		log_output("[ipc_controller]智能相机开始工作");
+		result = aio_ipc_start();
 	}
 	return result;
 }

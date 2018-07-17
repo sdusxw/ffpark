@@ -58,7 +58,7 @@ class NetHttpServer
 {
 public:
 	bool open_bind_listen(int listen_port);
-	bool get_message(char * &ptr_msg, int &len_msg);
+	bool get_message(std::string &msg);
 
 public:
 	int i, maxi, maxfd, sockfd;

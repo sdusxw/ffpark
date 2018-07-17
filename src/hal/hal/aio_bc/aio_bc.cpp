@@ -321,7 +321,7 @@ void * aio_camera_loop(void* para)
 			vehicle_info.plate =
 					json_info["result"]["PlateResult"]["license"].asString();
 			//判断是否无车牌
-			if(vehicle_info.plate.length() == 0)
+			if(vehicle_info.plate == "_无_")
 				vehicle_info.plate = "无车牌";
 			//处理车牌颜色
 			int colorType =

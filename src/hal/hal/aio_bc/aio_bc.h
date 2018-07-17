@@ -40,7 +40,7 @@ public:
 	bool initialize();
 	int listen_port;						//端口分配：A入口主机8080，AA入口辅机XXXX，B出口主机8090，BA出口辅机XXXX
 public:
-	NetTcpServer	tcp_server;	//Tcp接收器
+	NetHttpServer	http_server;	//Tcp接收器
 };
 
 //智能相机服务端侦听线程

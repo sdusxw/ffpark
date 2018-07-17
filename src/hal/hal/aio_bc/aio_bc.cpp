@@ -267,7 +267,7 @@ bool AioCamera::initialize()
 	else
 		return false;
 	//打开TCP server服务端口
-	if (tcp_server.open_bind_listen(listen_port))
+	if (http_server.open_bind_listen(listen_port))
 	{
 		sprintf(str_msg, "[AioCamera]TCP服务器端口%d打开成功", listen_port);
 		log_msg = str_msg;
@@ -297,7 +297,7 @@ void * aio_camera_loop(void* para)
 	while (true)
 	{
 		std::string msg;
-		p_camera->tcp_server.get_message(msg);
+		p_camera->http_server.get_message(msg);
 		if (msg.length() > 0)
 		{
 			//首先解析车牌结果

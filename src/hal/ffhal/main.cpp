@@ -40,7 +40,7 @@ int main()
 	msg_print("初始化与Bcenter的网络连接...");
 	log_output("初始化与Bcenter的网络连接...");
 	char lo_ip[] = "127.0.0.1";
-	if (udp_sender.open(lo_ip, 5001))
+	if (udp_sender.open(lo_ip, 5022))
 		log_output("Bipc与Bcenter发送端口打开成功");
 	else
 	{
@@ -48,7 +48,7 @@ int main()
 		exit(1);
 	}
 
-	if (udp_receiver.listen(5002))
+	if (udp_receiver.listen(5021))
 		log_output("Bcenter消息监听端口打开成功");
 	else
 	{

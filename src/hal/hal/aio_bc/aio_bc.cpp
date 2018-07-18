@@ -90,12 +90,12 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
     
 	if ((in_out == "入口") || (g_machine.one_way))
 	{
-		camera_ip = g_machine.channel_a.main_camera.device_ip_id;
+        camera_ip = "192.168.1.101";//g_machine.channel_a.main_camera.device_ip_id;
         message = std::string((const char *)open_in, 14);
 	}
 	else
 	{
-		camera_ip = g_machine.channel_b.main_camera.device_ip_id;
+		camera_ip = "192.168.1.103";//g_machine.channel_b.main_camera.device_ip_id;
         message = std::string((const char *)open_out, 14);
 	}
 	if (tcp_client.connect_server(camera_ip, 5231))

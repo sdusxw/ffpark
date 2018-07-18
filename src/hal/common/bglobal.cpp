@@ -11,7 +11,7 @@ UdpSender udp_sender;	//与Bcenter通讯专用udp发射器
 
 UdpReceiver udp_receiver;	//与Bcenter通讯专用udp接收器
 
-UdpReceiver udp_recv_led;   //与Bcenter通讯专用udp接收器, 接收BLCD消息
+UdpReceiver udp_recv_lcd;   //与Bcenter通讯专用udp接收器, 接收BLCD消息
 
 bool g_bipc_config_done;	//全局设备参数初始化
 

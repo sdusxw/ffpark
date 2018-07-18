@@ -148,7 +148,7 @@ void * blcd_message_loop(void* para)
     do
     {
         //获取bcenter->blcd发送的消息
-        bcenter_message = udp_receiver.get_mesage();
+        bcenter_message = udp_recv_lcd.get_mesage();
         log_output("[bcenter->blcd]" + bcenter_message);
         //对bcenter发送的消息进行解析处理
         Json::Reader reader;

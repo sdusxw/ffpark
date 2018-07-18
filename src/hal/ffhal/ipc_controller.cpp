@@ -73,10 +73,10 @@ bool open_door(Json::Value json)
 			log_output("[ipc_controller]" + in_out + "开闸放行失败");
 		}
 	}
-	if (g_machine.snap_or_aio)	//中维智能相机
+	if (g_machine.snap_or_aio)	//智能相机
 	{
-		log_output("[ipc_controller]中维智能相机收到开闸命令");
-		//result = aio_open_door(channel_id, in_out, flag);
+		log_output("[ipc_controller]智能相机收到开闸命令");
+		result = aio_open_door(channel_id, in_out, flag);
 		if (result)
 		{
 			log_output("[ipc_controller]" + in_out + "开闸放行成功");

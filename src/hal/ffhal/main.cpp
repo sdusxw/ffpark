@@ -9,6 +9,7 @@
 #include <jsoncpp/json/json.h>
 
 void * bcenter_message_loop(void* para);
+void * blcd_message_loop(void* para);
 void * get_ipc_config(void* para);
 
 int main()
@@ -56,12 +57,27 @@ int main()
 		exit(1);
 	}
 	log_output("Bipc与Bcenter的网络连接初始化成功");
+    
+    if (udp_recv_lcd.listen(5002))
+        log_output("Bcenter->BLCD消息监听端口打开成功");
+    else
+    {
+        log_output("Bcenter->BLCD消息监听端口打开失败");
+        exit(1);
+    }
+    log_output("Bipc与Bcenter的网络连接初始化成功");
 
 	pthread_t tid_bcenter_msg_loop;
 	pthread_attr_t attr_bcenter_msg_loop;
 	pthread_attr_init(&attr_bcenter_msg_loop);
 	pthread_create(&tid_bcenter_msg_loop, &attr_bcenter_msg_loop,
 			bcenter_message_loop, NULL);
+    
+    pthread_t tid_blcd_msg_loop;
+    pthread_attr_t attr_blcd_msg_loop;
+    pthread_attr_init(&attr_blcd_msg_loop);
+    pthread_create(&tid_blcd_msg_loop, &attr_blcd_msg_loop,
+            blcd_message_loop, NULL);
 
 	pthread_t tid_get_ipc_config;
 	pthread_attr_t attr_get_ipc_config;
@@ -125,6 +141,60 @@ void * bcenter_message_loop(void* para)
 		}
 	} while (true);
 	return NULL;
+}
+void * blcd_message_loop(void* para)
+{
+    std::string bcenter_message = "";
+    do
+    {
+        //获取bcenter->blcd发送的消息
+        bcenter_message = udp_receiver.get_mesage();
+        log_output("[bcenter->blcd]" + bcenter_message);
+        //对bcenter发送的消息进行解析处理
+        Json::Reader reader;
+        Json::Value json_object;
+        
+        if (!reader.parse(bcenter_message, json_object))
+        {
+            //JSON格式错误导致解析失败
+            log_output("[json]解析失败");
+            continue;
+        }
+        //根据cmd来进入相应处理分支
+        std::string string_cmd = json_object["cmd"].asString();
+        if (string_cmd == "ipc_config")    //硬件配置信息
+        {
+            log_output("[json]收到硬件配置信息");
+            if (get_ipc_config(json_object))
+            {
+                log_output("[json]硬件配置信息解析成功");
+                g_bipc_config_done = true;
+                log_output("[work]开始工作");
+                ipc_start();
+            }
+        }
+        if (string_cmd == "close_door")    //落杆
+        {
+            log_output("[json]收到落杆指令");
+            close_door(json_object);
+        }
+        if (string_cmd == "open_door")    //开闸放行
+        {
+            log_output("[json]收到开闸放行指令");
+            open_door(json_object);
+        }
+        if (string_cmd == "snap_shot")    //手动抓拍
+        {
+            log_output("[json]收到手动抓拍指令");
+            snap_shot(json_object);
+        }
+        if (string_cmd == "exit")    //退出命令
+        {
+            log_output("[json]收到退出命令");
+            exit(0);
+        }
+    } while (true);
+    return NULL;
 }
 //间隔1s循环发送get_ipc_config命令，直到收到合法的硬件配置
 void * get_ipc_config(void* para)

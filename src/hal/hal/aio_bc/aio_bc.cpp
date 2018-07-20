@@ -120,7 +120,6 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 		std::string recv_msg;
 		int n = tcp_client.send_data(message, recv_msg);
 		tcp_client.dis_connect();
-		std::cout << recv_msg << std::endl;
 		if (recv_msg.length() > 0)	//有返回的消息
 		{
             if (recv_msg.length() == 14 && (int)(recv_msg[12]) == 1) {

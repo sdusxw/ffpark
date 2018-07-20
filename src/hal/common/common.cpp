@@ -6,6 +6,8 @@
 #include <sys/file.h>
 #include <fstream>
 
+#include <iconv.h>
+
 extern "C"
 {
 #include <jpeglib.h>
@@ -265,4 +267,60 @@ std::vector<std::string> string_split(std::string str,std::string pattern)
         }
     }
     return result;
+}
+
+/****************************************************************************************************************************************
+ 函数简介     UTF-8与GB2312转换
+ 
+ ****************************************************************************************************************************************/
+
+int code_convert(char *from_charset, char *to_charset, char *inbuf,
+                 size_t inlen, char *outbuf, size_t outlen)
+{
+    iconv_t cd;
+    int rc;
+    char **pin = &inbuf;
+    char **pout = &outbuf;
+    
+    cd = iconv_open(to_charset, from_charset);
+    if (cd == 0)
+        return -1;
+    memset(outbuf, 0, outlen);
+    if (iconv(cd, pin, &inlen, pout, &outlen) == -1)
+        return -1;
+    iconv_close(cd);
+    return 0;
+}
+int utf8togb2312(char *inbuf, size_t inlen, char *outbuf, size_t outlen)
+{
+    return code_convert("utf-8", "gb2312", inbuf, inlen, outbuf, outlen);
+}
+
+int gb2312toutf8(char *inbuf, size_t inlen, char *outbuf, size_t outlen)
+{
+    return code_convert("gb2312", "utf-8", inbuf, inlen, outbuf, outlen);
+}
+
+bool utf8togb2312(std::string utf8, std::string &gb2312)
+{
+    char gbk[1024];
+    int len = 1024;
+    int ret = utf8togb2312((char*) utf8.c_str(), utf8.length(), gbk, len);
+    gb2312 = gbk;
+    if (0 == ret)
+        return true;
+    else
+        return false;
+}
+
+bool gbk2utf8(std::string gbk, std::string &utf8)
+{
+    char utf[4096];
+    int len = 4096;
+    int ret = gb2312toutf8((char*) gbk.c_str(), gbk.length(), utf, len);
+    utf8 = utf;
+    if (0 == ret)
+        return true;
+    else
+        return false;
 }

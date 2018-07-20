@@ -20,7 +20,7 @@ add_executable(test_json_base64
     test_json_base64.cpp
 )
 
-target_link_libraries(common pthread jpeg jsoncpp)
+target_link_libraries(common pthread jpeg jsoncpp iconv)
 
 target_link_libraries(test_http pthread common)
 

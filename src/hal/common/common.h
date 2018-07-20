@@ -111,4 +111,11 @@ public:
 	}
 };
 
+bool gbk2utf8(std::string gbk, std::string &utf8);
+bool utf8togb2312(std::string utf8, std::string &gb2312);
+int gb2312toutf8(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
+int utf8togb2312(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
+int code_convert(char *from_charset, char *to_charset, char *inbuf,
+                 size_t inlen, char *outbuf, size_t outlen);
+
 #endif

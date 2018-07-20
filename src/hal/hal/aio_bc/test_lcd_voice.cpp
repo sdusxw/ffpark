@@ -65,7 +65,7 @@ int main()
         cout << message << endl;
         int n = tcp_client.send_data(message, recv_msg);
         tcp_client.dis_connect();
-        cout << "recv message length:\t" << recv_msg.length() << endl;
+        cout << "recv message length:\t" << recv_msg.length() <<"\t"<< recv_msg << endl;
         if (recv_msg.length() > 0)    //有返回的消息
         {
             for(int i=0;i<recv_msg.length();i++)

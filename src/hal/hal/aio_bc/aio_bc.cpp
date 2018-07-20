@@ -86,7 +86,7 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
     std::string message;
     
     unsigned char open_in[] = {0x14, 0x6b, 0x9d, 0x98, 0x40, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x02, 0x25};
-    unsigned char open_out[] ={0x14, 0x6b, 0x9d, 0x98, 0x40, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x02, 0x25};
+    unsigned char open_out[] ={0x14, 0x6b, 0x9d, 0x98, 0x76, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x02, 0x25};
     
 	if ((in_out == "入口") || (g_machine.one_way))
 	{
@@ -123,7 +123,12 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 		std::cout << recv_msg << std::endl;
 		if (recv_msg.length() > 0)	//有返回的消息
 		{
-			
+            std::cout << "recv_msg:\t";
+            for(int i=0;i<recv_msg.length();i++)
+            {
+                printf("%x ",recv_msg[i]);
+            }
+            std::cout << std::endl;
 		}
 	}
 	return true;

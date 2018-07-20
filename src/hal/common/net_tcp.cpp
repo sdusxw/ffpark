@@ -51,9 +51,10 @@ size_t NetTcpClient::send_data(std::string send_msg, std::string &recv_msg)
 {
 	size_t n_len = (size_t) (send_msg.length());
 	size_t n_ret = write(connfd, send_msg.c_str(), n_len);
-	int n_http = 0;
-	//char *p_http_response = (char *) getHTTPResponse(connfd, &n_http);
-	//recv_msg = p_http_response;
+	int n_recv = 0;
+	char buf[2048];
+    n_recv = receivedata(connfd, buf, 2048, 5000, NULL);
+	recv_msg = std::string((const char *)buf, n_recv);
 	return n_ret;
 }
 

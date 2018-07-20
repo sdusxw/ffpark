@@ -123,12 +123,18 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 		std::cout << recv_msg << std::endl;
 		if (recv_msg.length() > 0)	//有返回的消息
 		{
-            std::cout << "recv_msg:\t";
-            for(int i=0;i<recv_msg.length();i++)
+            if (recv_msg.length() == 14 && (int)(recv_msg[12]) == 1) {
+                sprintf(str_msg, "[AioCamera]开闸成功");
+                log_msg = str_msg;
+                msg_print(log_msg);
+                log_output(log_msg);
+            } else
             {
-                printf("%x ",recv_msg[i]);
+                sprintf(str_msg, "[AioCamera]开闸失败");
+                log_msg = str_msg;
+                msg_print(log_msg);
+                log_output(log_msg);
             }
-            std::cout << std::endl;
 		}
 	}
 	return true;

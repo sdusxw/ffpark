@@ -51,6 +51,7 @@ size_t NetTcpClient::send_data(std::string send_msg, std::string &recv_msg)
 {
 	size_t n_len = (size_t) (send_msg.length());
 	size_t n_ret = write(connfd, send_msg.c_str(), n_len);
+    printf("Sent:\t%ld\t%ld\n", n_len, n_ret);
 	int n_recv = 0;
 	char buf[2048];
     n_recv = receivedata(connfd, buf, 2048, 5000, NULL);

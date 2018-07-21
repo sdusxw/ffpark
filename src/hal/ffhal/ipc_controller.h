@@ -27,5 +27,13 @@ bool open_door(Json::Value json);
  * flag: 目前只支持once
  */
 bool snap_shot(Json::Value json);
+/*
+ * LCD显示消息
+ */
+bool lcd_show(Json::Value json);
+/*
+ * LCD语音消息
+ */
+bool lcd_voice(Json::Value json);
 
 #endif

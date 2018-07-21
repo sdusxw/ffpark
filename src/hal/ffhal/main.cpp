@@ -183,14 +183,14 @@ void * blcd_message_loop(void* para)
             log_output("[json]收到开闸放行指令");
             open_door(json_object);
         }
-        if (string_cmd == "snap_shot")    //手动抓拍
+        if (string_cmd == "sendled")    //LCD显示消息
         {
-            log_output("[json]收到手动抓拍指令");
+            log_output("[json]收到手LCD显示消息");
             snap_shot(json_object);
         }
-        if (string_cmd == "exit")    //退出命令
+        if (string_cmd == "sendvoice")    //语音播报消息
         {
-            log_output("[json]收到退出命令");
+            log_output("[json]收到语音播报消息");
             exit(0);
         }
     } while (true);

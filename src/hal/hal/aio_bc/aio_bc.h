@@ -19,6 +19,15 @@ bool aio_open_door(std::string channel_id, std::string in_out,
 		std::string flag);
 
 /*
+ * LCD显示消息处理
+ */
+bool aio_lcd_show(std::string led_ip, std::string row1, std::string row2, std::string row3, std::string row4);
+/*
+ * LCD语音消息处理
+ */
+bool aio_lcd_voice(std::string content, std::string led_ip);
+
+/*
  * A通道推送车辆识别信息
  */
 void aio_send_car_come_a();

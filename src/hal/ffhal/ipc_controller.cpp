@@ -124,3 +124,25 @@ bool snap_shot(Json::Value json)
 	}
 	return result;
 }
+/*
+ * LCD显示消息
+ */
+bool lcd_show(Json::Value json)
+{
+    bool result = false;
+    //std::string channel_id = json["channel_id"].asString();
+    //std::string in_out = json["in_out"].asString();
+    //std::string flag = json["flag"].asString();
+    return result;
+}
+/*
+ * LCD语音消息
+ */
+bool lcd_voice(Json::Value json)
+{
+    bool result = false;
+    std::string content = json["content"].asString();
+    std::string led_ip = json["led_ip"].asString();
+    result = aio_lcd_voice(content, led_ip);
+    return result;
+}

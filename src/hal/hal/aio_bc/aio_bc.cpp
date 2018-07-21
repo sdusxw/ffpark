@@ -1,5 +1,5 @@
 #include "aio_bc.h"
-
+#include "net_tcp.h"
 #include "base64.h"
 
 #include <sys/time.h>
@@ -137,6 +137,102 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 		}
 	}
 	return true;
+}
+
+bool control_bc_lcd(std::string json_msg, std::string led_ip)
+{
+    if(led_ip.length()==0)
+        return false;
+    bool b_connect = false;
+    char str_msg[1024];
+    std::string log_msg;
+    NetTcpClient tcp_client;
+    unsigned char msg_head[] = {0x96, 0x6b, 0x9d, 0x98, 0x76, 0x49, 0x50, 0x52, 0x54, 0x01};
+    std::string message = std::string ((const char *)msg_head, 10);
+    
+    std::string content_gbk;
+    
+    utf8togb2312(json_msg, content_gbk);
+    
+    int l=content_gbk.length();
+    
+    unsigned short ls=(unsigned short)l;
+    
+    unsigned char l0=(unsigned char)((ls&0xff00)>>8);
+    
+    unsigned char l1=(unsigned char)(ls&0xff);
+    
+    message += l0;
+    
+    message += l1;
+    
+    message += content_gbk;
+    
+    unsigned char cs = (unsigned char)0x30;
+    
+    message += cs;
+    
+    std::cout << "message length:\t" << message.length() << std::endl;
+    
+    std::cout << message << std::endl;
+    
+    for(int i=0;i<message.length();i++)
+    {
+        printf("%02x ", (unsigned char)message[i]);
+    }
+    std::cout << std::endl;
+    
+    
+    if (tcp_client.connect_server(led_ip, 5831))
+    {
+        printf("[AioCamera]连接一体机%s的5831端口成功", led_ip.c_str());
+        b_connect = true;
+    }
+    else
+    {
+        sprintf(str_msg, "[AioCamera]连接一体机%s的5831端口失败", led_ip.c_str());
+        b_connect = false;
+    }
+    if (b_connect)
+    {
+        
+        std::string recv_msg;
+        std::cout << message << std::endl;
+        int n = tcp_client.send_data(message, recv_msg);
+        tcp_client.dis_connect();
+        std::cout << "recv message length:\t" << recv_msg.length() <<"\t"<< recv_msg << std::endl;
+        if (recv_msg.length() > 0)    //有返回的消息
+        {
+            for(int i=0;i<recv_msg.length();i++)
+            {
+                printf("%02x ", (unsigned char)recv_msg[i]);
+            }
+            return true;
+        }
+        std::cout << std::endl;
+        return false;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/*
+ * LCD显示消息处理
+ */
+bool aio_lcd_show(std::string led_ip, std::string row1, std::string row2, std::string row3, std::string row4)
+{
+    return true;
+}
+/*
+ * LCD语音消息处理
+ */
+bool aio_lcd_voice(std::string content, std::string led_ip)
+{
+    Json::Value json_voice;
+    json_voice["Voice"] = Json::Value(content);
+    return control_bc_lcd(json_voice.toStyledString(), led_ip);
 }
 
 /*

@@ -19,7 +19,7 @@ int main()
     //      message = std::string((const char *)data, 399);
     message = std::string ((const char *)open_in, 10);
     
-    std::string content = "{\"Page\":\"in_idle.html\",\"Key\":[{\"Name\":\"BCA_TEXT_REMAIN_SPACE\",\"Type\":0,\"Data\":\"0042\"},{\"Name\":\"BCA_TEXT_CHANNEL_NAME\",\"Type\":0,\"Data\":\"A\"},{\"Name\":\"BCA_TEXT_CAR_IN_TIME\",\"Type\":0,\"Data\":\"2018-07-21,09:11\"},{\"Name\":\"BCA_TEXT_CAR_OUT_TIME\",\"Type\":0,\"Data\":\"2018-07-21,09:11\"},{\"Name\":\"BCA_TEXT_CONTENT0\",\"Type\":0,\"Data\":\"B\"},{\"Name\":\"BCA_TEXT_CONTENT1\",\"Type\":0,\"Data\":\"\"}]}0";
+    std::string content = "{\"Page\":\"in_idle.html\",\"Key\":[{\"Name\":\"BCA_TEXT_REMAIN_SPACE\",\"Type\":0,\"Data\":\"0042\"},{\"Name\":\"BCA_TEXT_CHANNEL_NAME\",\"Type\":0,\"Data\":\"入口\"},{\"Name\":\"BCA_TEXT_CAR_IN_TIME\",\"Type\":0,\"Data\":\"2018-07-21,09:11\"},{\"Name\":\"BCA_TEXT_CAR_OUT_TIME\",\"Type\":0,\"Data\":\"2018-07-21,09:11\"},{\"Name\":\"BCA_TEXT_CONTENT0\",\"Type\":0,\"Data\":\"B\"},{\"Name\":\"BCA_TEXT_CONTENT1\",\"Type\":0,\"Data\":\"\"}]}0";
     
     std::string content_gbk;
     

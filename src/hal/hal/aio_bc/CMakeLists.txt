@@ -14,9 +14,14 @@ add_executable(test_open_door
 add_executable(test_lcd_voice
     test_lcd_voice.cpp)
 
+add_executable(test_lcd_show
+    test_lcd_show.cpp)
+
 target_link_libraries(aio_bc common)
 
 target_link_libraries(test_open_door common)
 
 target_link_libraries(test_lcd_voice common)
+
+target_link_libraries(test_lcd_show common jsoncpp)
 

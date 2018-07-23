@@ -185,8 +185,8 @@ void * blcd_message_loop(void* para)
         }
         if (string_cmd == "sendled")    //LCD显示消息
         {
-            log_output("[json]收到手LCD显示消息");
-            //snap_shot(json_object);
+            log_output("[json]收到LCD显示消息");
+            lcd_show(json_object);
         }
         if (string_cmd == "sendvoice")    //语音播报消息
         {

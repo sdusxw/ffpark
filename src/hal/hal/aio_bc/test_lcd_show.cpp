@@ -16,7 +16,7 @@ int main()
     
     unsigned char open_in[] = {0x96, 0x6b, 0x9d, 0x98, 0x76, 0x49, 0x50, 0x52, 0x54, 0x01};
     
-    camera_ip = "192.168.1.101";//g_machine.channel_a.main_camera.device_ip_id;
+    camera_ip = "192.168.1.103";//g_machine.channel_a.main_camera.device_ip_id;
     //      message = std::string((const char *)data, 399);
     message = std::string ((const char *)open_in, 10);
     

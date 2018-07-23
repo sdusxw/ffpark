@@ -130,9 +130,12 @@ bool snap_shot(Json::Value json)
 bool lcd_show(Json::Value json)
 {
     bool result = false;
-    //std::string channel_id = json["channel_id"].asString();
-    //std::string in_out = json["in_out"].asString();
-    //std::string flag = json["flag"].asString();
+    std::string led_ip = json["led_ip"].asString();
+    std::string row1 = json["row1"].asString();
+    std::string row2 = json["row2"].asString();
+    std::string row3 = json["row3"].asString();
+    std::string row4 = json["row4"].asString();
+    result = aio_lcd_show(led_ip, row1, row2, row3, row4);
     return result;
 }
 /*

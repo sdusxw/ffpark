@@ -218,12 +218,101 @@ bool control_bc_lcd(std::string json_msg, std::string led_ip)
     }
 }
 
+std::string compose_out_temp(std::string plate, std::string duration, std::string charge)
+{
+    Json::Value json_lcd_show;
+    Json::Value json_key, json_keys;
+    json_lcd_show["Page"] = "out_temp_car.html";
+    json_key["Name"] = Json::Value("BCA_IMG_QRCODE");
+    json_key["Type"] = 0;
+    json_key["Data"] = "http://ipark.sdboon.com/slyy/out.php?park_id=0531000008&box_ip=192.168.1.201";
+    json_keys.append(json_key);
+    
+    json_key["Name"] = "BCA_TEXT_PLATE";
+    json_key["Type"] = 0;
+    json_key["Data"] = plate;
+    json_keys.append(json_key);
+    
+    json_key["Name"] = "BCA_TEXT_CHARGE";
+    json_key["Type"] = 0;
+    json_key["Data"] = charge;
+    json_keys.append(json_key);
+    
+    json_key["Name"] = "BCA_TEXT_CAR_IN_TIME";
+    json_key["Type"] = 0;
+    json_key["Data"] = "地下停车场入口";
+    json_keys.append(json_key);
+    
+    json_key["Name"] = "BCA_TEXT_CAR_DURATION";
+    json_key["Type"] = 0;
+    json_key["Data"] = duration;
+    json_keys.append(json_key);
+    
+    json_lcd_show["Key"] = json_keys;
+    return json_lcd_show.toStyledString();
+}
+
+std::string compose_in_temp(std::string plate)
+{
+    Json::Value json_lcd_show;
+    Json::Value json_key, json_keys;
+    json_lcd_show["Page"] = "in_temp_car.html";
+    
+    json_key["Name"] = "BCA_TEXT_PLATE";
+    json_key["Type"] = 0;
+    json_key["Data"] = plate;
+    json_keys.append(json_key);
+    
+    json_key["Name"] = "BCA_TEXT_CAR_TYPE";
+    json_key["Type"] = 0;
+    json_key["Data"] = "临时车";
+    json_keys.append(json_key);
+    
+    json_lcd_show["Key"] = json_keys;
+    return json_lcd_show.toStyledString();
+}
+
 /*
  * LCD显示消息处理
+ {
+ "cmd" : "sendled",
+ "led_ip" : "192.168.1.103",
+ "row1" : "收费2元",
+ "row2" : "鲁A536SZ",
+ "row3" : "临时车",
+ "row4" : "停车29分钟",
+ "row_num" : "4"
+ }
  */
 bool aio_lcd_show(std::string led_ip, std::string row1, std::string row2, std::string row3, std::string row4)
 {
-    return true;
+    if (led_ip == "192.168.1.103") //出口
+    {
+        // 1. 判断临时车
+        if(row3 == "临时车")
+        {
+        // 2. 收费不为0元
+            if(row1[6] != '0')
+            {
+                std::string charge = row1.substr(6);
+                std::string plate = row2;
+                std::string duration = row4.substr(6);
+                std::string json_msg = compose_out_temp(plate, duration, charge);
+                return control_bc_lcd(json_msg, led_ip);
+            }
+        }
+    }
+    else if(led_ip == "192.168.1.101") //入口
+    {
+        // 1. 判断临时车
+        if(row3 == "临时车")
+        {
+            std::string plate = row2;
+            std::string json_msg = compose_in_temp(plate);
+            return control_bc_lcd(json_msg, led_ip);
+        }
+    }
+    return false;
 }
 /*
  * LCD语音消息处理

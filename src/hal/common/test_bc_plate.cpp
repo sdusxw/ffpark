@@ -9,7 +9,7 @@ int main()
     {
         char * msg = NULL;
         int length;
-        if(http_server8090.get_message(msg, length))
+        if(tcp_server_5232.get_message(msg, length))
         {
             printf("Got message with length:\t%d\n", length);
             char filename[128];

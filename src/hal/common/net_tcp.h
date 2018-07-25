@@ -77,7 +77,7 @@ class NetTcpServer
 {
 public:
     bool open_bind_listen(int listen_port);
-    bool get_message(unsigned char* message, unsigned int length);
+    bool get_message(std::string &msg);
     
 public:
     int i, maxi, maxfd, sockfd;

@@ -7,12 +7,13 @@ int main()
     tcp_server_5232.open_bind_listen(5232);
     while(true)
     {
-        char * msg = NULL;
-        int length;
-        if(tcp_server_5232.get_message(msg, length))
+        std::string msg;
+        int length=0;
+        if(tcp_server_5232.get_message(msg))
         {
+            length = msg.length();
             printf("Got message with length:\t%d\n", length);
-            char filename[128];
+ /*           char filename[128];
             sprintf(filename, "tcp_%d.bin", length);
             FILE *fid;
             fid = fopen(filename,"wb");
@@ -21,9 +22,10 @@ int main()
                 printf("写出文件出错");
             }
             
-            fwrite(msg, length, 1, fid);
+            fwrite(msg.c_str(), length, 1, fid);
             
             fclose(fid);
+  */
         }
  
         usleep(1000);

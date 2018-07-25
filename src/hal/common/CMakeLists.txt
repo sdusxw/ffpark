@@ -20,8 +20,14 @@ add_executable(test_json_base64
     test_json_base64.cpp
 )
 
+add_executable(test_bc_plate
+    test_bc_plate.cpp
+)
+
 target_link_libraries(common pthread jpeg jsoncpp iconv)
 
 target_link_libraries(test_http pthread common)
 
 target_link_libraries(test_json_base64 pthread jsoncpp common)
+
+target_link_libraries(test_bc_plate pthread common)

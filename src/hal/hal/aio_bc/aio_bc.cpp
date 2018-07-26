@@ -240,7 +240,7 @@ bool control_bc_lcd(std::string json_msg, std::string led_ip)
     }
 }
 
-std::string compose_out_temp(std::string plate, std::string duration, std::string charge)
+std::string compose_out_temp(std::string plate, std::string duration, std::string charge, std::string in_time)
 {
     Json::Value json_lcd_show;
     Json::Value json_key, json_keys;
@@ -262,7 +262,7 @@ std::string compose_out_temp(std::string plate, std::string duration, std::strin
     
     json_key["Name"] = "BCA_TEXT_CAR_IN_TIME";
     json_key["Type"] = 0;
-    json_key["Data"] = "2018-07-23,10:21";
+    json_key["Data"] = in_time;
     json_keys.append(json_key);
     
     json_key["Name"] = "BCA_TEXT_CAR_DURATION";
@@ -310,19 +310,17 @@ bool aio_lcd_show(std::string led_ip, std::string row1, std::string row2, std::s
 {
     if (led_ip == "192.168.1.103") //出口
     {
-        // 1. 判断临时车
-        if(row3 == "临时车")
-        {
-        // 2. 收费不为0元
+        
             if(row1[6] != '0')
             {
                 std::string charge = row1.substr(6);
                 std::string plate = row2;
                 std::string duration = row4.substr(6);
-                std::string json_msg = compose_out_temp(plate, duration, charge);
+                std::string in_time = row3;
+                std::string json_msg = compose_out_temp(plate, duration, charge, in_time);
                 return control_bc_lcd(json_msg, led_ip);
             }
-        }
+        
     }
     else if(led_ip == "192.168.1.101") //入口
     {

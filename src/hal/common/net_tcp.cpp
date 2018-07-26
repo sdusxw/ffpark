@@ -94,12 +94,18 @@ int receivedata(int socket, char * data, int length, int timeout,
 
 void * getTcpStream(int s, int * size)
 {
-    char buf[2048];
+    unsigned char buf[2048];
     int n = 0;
     int i=0;
-    while ((n = receivedata(s, buf, 2048, 5000, NULL)) > 0)
+    while ((n = receivedata(s, (char*)buf, 2048, 5000, NULL)) > 0)
     {
-        printf("%d\tTCP Stream\tcmd: %x, \tLength: %d\n", i, buf[0], n);
+        printf("%d\tTCP Stream\tcmd: %x, \tLength: %d\n", i++, buf[0], n);
+        if(buf[0]==135)
+        {
+            for(int j=0;j<n;j++)
+                printf("%c", (char)(buf[j]));
+        }
+        printf("\n");
     }
     *size = 1;
     return (void*)buf;

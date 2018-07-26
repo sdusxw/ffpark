@@ -603,7 +603,7 @@ bool NetTcpServer::get_message(std::string &msg)
         int n_http = 0;
         char *p_http_response = (char *) getTcpStream(sockfd, &n_http);
         if(n_http>0)
-            msg = p_http_response;
+            msg = std::string(p_http_response, n_http);
         if(p_http_response)
             free(p_http_response);
         close(sockfd);

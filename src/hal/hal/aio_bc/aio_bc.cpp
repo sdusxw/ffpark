@@ -327,7 +327,7 @@ bool aio_lcd_show(std::string led_ip, std::string row1, std::string row2, std::s
     else if(led_ip == "192.168.1.101") //入口
     {
         // 1. 判断临时车
-        if(row3 == "临时车")
+        if(row3 == "临时车未授权车辆")
         {
             std::string plate = row2;
             std::string json_msg = compose_in_temp(plate);

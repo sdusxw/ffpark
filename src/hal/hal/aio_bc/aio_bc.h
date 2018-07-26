@@ -55,4 +55,7 @@ public:
 //智能相机服务端侦听线程
 void * aio_camera_loop(void* para);
 
+//蓝卡一体机车牌识别结果接收线程
+void * bc_plate(void* para);
+
 #endif

@@ -16,12 +16,16 @@ Vehicle aio_channel_a_aux_vehicle;		//A通道辅相机识别结果
 Vehicle aio_channel_b_main_vehicle;	//B通道主相机识别结果
 Vehicle aio_channel_b_aux_vehicle;		//B通道辅相机识别结果
 
+NetTcpServer tcp_server_5232;   //蓝卡设备识别结果接收器
+
 /*
  * 智能机初始化
  * 1. 初始化相机
  */
 bool aio_ipc_start()
 {
+    char str_msg[1024];
+    std::string log_msg;
 	//初始化A通道
 	if (g_machine.channel_a_enable)
 	{
@@ -70,6 +74,19 @@ bool aio_ipc_start()
 			aio_cam_b_aux.initialize();
 		}
 	}
+    //打开TCP server服务端口 蓝卡一体机车牌接收端口5232
+    if (tcp_server_5232.open_bind_listen(5232))
+    {
+        sprintf(str_msg, "[BuleCard]TCP服务器端口%d打开成功", 5232);
+        log_msg = str_msg;
+        msg_print(log_msg);
+        log_output(log_msg);
+    }
+    pthread_t tid_bc_plate;
+    pthread_attr_t attr_bc_plate;
+    pthread_attr_init(&attr_bc_plate);
+    pthread_create(&tid_bc_plate, &attr_bc_plate, bc_plate,
+                   NULL);
 	return true;
 }
 /*
@@ -430,7 +447,7 @@ bool AioCamera::initialize()
 		log_output(log_msg);
 		return false;
 	}
-
+    
 	pthread_t tid_aio_camera_loop;
 	pthread_attr_t attr_aio_camera_loop;
 	pthread_attr_init(&attr_aio_camera_loop);
@@ -550,4 +567,24 @@ void * aio_camera_loop(void* para)
 			}
 		}
 	}
+}
+//蓝卡一体机车牌识别结果接收线程
+void * bc_plate(void * para)
+{
+    while(true)
+    {
+        std::string msg;
+        int length=0;
+        if(tcp_server_5232.get_message(msg))
+        {
+            length = msg.length();
+            printf("Got message with length:\t%d\n", length);
+            std::cout << msg << std::endl;
+            for(int i = 0;i<length;i++)
+                printf("%02x ", (unsigned char)(msg[i]));
+            std::cout << std::endl;
+        }
+        
+        usleep(1000);
+    }
 }

@@ -287,7 +287,7 @@ std::string compose_in_temp(std::string plate)
     
     json_key["Name"] = "BCA_TEXT_CAR_TYPE";
     json_key["Type"] = 0;
-    json_key["Data"] = "临时车";
+    json_key["Data"] = "临时车辆";
     json_keys.append(json_key);
     
     json_lcd_show["Key"] = json_keys;

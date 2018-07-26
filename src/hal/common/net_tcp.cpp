@@ -106,6 +106,10 @@ void * getTcpStream(int s, int * size)
            {
                for(int j=0;j<n;j++)
                    printf("%c", (char)(buf[j]));
+               //response
+               unsigned char response[] = {0x87, 0x6b, 0x9d, 0x98, 0x40, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x01, 0x30};
+               size_t n_w = write(s, (char*)response, 14);
+               printf("Response:\t%d\n", (int)n_w);
            }
             printf("\n");
         }

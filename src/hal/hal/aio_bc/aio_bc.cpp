@@ -18,6 +18,9 @@ Vehicle aio_channel_b_aux_vehicle;		//B通道辅相机识别结果
 
 NetTcpServer tcp_server_5232;   //蓝卡设备识别结果接收器
 
+std::string plate_channel_a;
+long ts_channel_a;
+
 /*
  * 智能机初始化
  * 1. 初始化相机
@@ -26,6 +29,8 @@ bool aio_ipc_start()
 {
     char str_msg[1024];
     std::string log_msg;
+    plate_channel_a = "";
+    ts_channel_a = get_unix_ts();
 	//初始化A通道
 	if (g_machine.channel_a_enable)
 	{
@@ -364,6 +369,14 @@ void aio_send_car_come_a()
 	json_car_info["vehicle"] = json_vehicle;
 	json_car["car_info"].append(json_car_info);
 	std::string car_come_msg = json_car.toStyledString();
+    long ts = get_unix_ts();
+    long interval = ts - ts_channel_a;
+    if((interval<5)&&(aio_channel_a_main_vehicle.plate == plate_channel_a))
+    {
+        log_output(car_come_msg);
+        log_output("时间间隔小于5秒而且车牌号一致，放弃推送A通道车辆信息");
+        return;
+    }
 	if (udp_sender.send(car_come_msg))
 	{
 		log_output(car_come_msg);
@@ -578,11 +591,27 @@ void * bc_plate(void * para)
         if(tcp_server_5232.get_message(msg))
         {
             length = msg.length();
-            printf("Got message with length:\t%d\n", length);
-            std::cout << msg << std::endl;
-            for(int i = 0;i<length;i++)
-                printf("%02x ", (unsigned char)(msg[i]));
-            std::cout << std::endl;
+            if(length > 100)   //仲裁结果推送
+            {
+                unsigned char devid = (unsigned char)(msg[4]);
+                if(0x40 == devid)   //入口
+                {
+                    std::string result_msg = msg.substr(12);
+                    std::vector<std::string> result = string_split(msg, ",");
+                    if(result.size()<5)
+                        continue;
+                    std::string plate_gb2312 = result[5];
+                    std::string plate_utf8;
+                    if(gbk2utf8(plate_gb2312, plate_utf8))
+                    {
+                        std::cout << "PLATE-BLUECARD:\t"  << plate_utf8 << std::endl;
+                        aio_channel_a_main_vehicle.plate = plate_utf8;
+                        aio_channel_a_main_vehicle.pcolor = "blue";
+                        aio_send_car_come_a();
+                    }
+                    
+                }
+            }
         }
         
         usleep(1000);

@@ -20,6 +20,7 @@
 #include <signal.h>
 #include <jsoncpp/json/json.h>
 #include <vector>
+#include <time.h>
 
 //全局日志文件变量
 extern std::fstream g_log_file;
@@ -37,6 +38,8 @@ std::string get_time_ms();
 std::string get_time_sec();
 //获取日期，精确到天
 std::string get_time_date();
+//获取Unix时间戳
+long get_unix_ts();
 //获取ip地址
 std::string get_local_ip();
 //获取ip地址，需要输入网卡设备名称

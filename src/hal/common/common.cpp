@@ -77,6 +77,15 @@ std::string get_time_date()
 	return str;
 }
 
+//获取Unix时间戳
+long get_unix_ts()
+{
+    time_t t;
+    long ts;
+    ts = time(&t);
+    return ts;
+}
+
 void msg_print(std::string msg)
 {
 	std::cout << "[" << get_time_us() << "]\t" << msg << std::endl;

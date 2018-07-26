@@ -99,13 +99,17 @@ void * getTcpStream(int s, int * size)
     int i=0;
     while ((n = receivedata(s, (char*)buf, 2048, 5000, NULL)) > 0)
     {
-        printf("%d\tTCP Stream\tcmd: %x, \tLength: %d\n", i++, buf[0], n);
-        if(buf[0]==135)
+        printf("%d\tTCP Stream\tcmd: %d, \tLength: %d\n", i, buf[0], n);
+        if(i==0)
         {
-            for(int j=0;j<n;j++)
-                printf("%c", (char)(buf[j]));
+           if(buf[0]==135)
+           {
+               for(int j=0;j<n;j++)
+                   printf("%c", (char)(buf[j]));
+           }
+            printf("\n");
         }
-        printf("\n");
+        i++;
     }
     *size = 1;
     return (void*)buf;

@@ -191,7 +191,7 @@ void * blcd_message_loop(void* para)
         if (string_cmd == "sendvoice")    //语音播报消息
         {
             log_output("[json]收到语音播报消息");
-            lcd_voice(json_object);
+            //lcd_voice(json_object);
         }
     } while (true);
     return NULL;

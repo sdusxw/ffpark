@@ -262,8 +262,8 @@ std::string compose_out_temp(std::string plate, std::string duration, std::strin
     
     json_key["Name"] = "BCA_TEXT_CAR_IN_TIME";
     json_key["Type"] = 0;
-    json_key["Data"] = "SLYY";
-    //json_keys.append(json_key);
+    json_key["Data"] = "2018-07-23,10:21";
+    json_keys.append(json_key);
     
     json_key["Name"] = "BCA_TEXT_CAR_DURATION";
     json_key["Type"] = 0;

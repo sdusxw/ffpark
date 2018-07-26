@@ -97,26 +97,27 @@ void * getTcpStream(int s, int * size)
     unsigned char buf[2048];
     int n = 0;
     int i=0;
+    char * content_buf;
+    content_buf = (char *) malloc(1024);
+    *size = 0;
     while ((n = receivedata(s, (char*)buf, 2048, 5000, NULL)) > 0)
     {
-        printf("%d\tTCP Stream\tcmd: %d, \tLength: %d\n", i, buf[0], n);
+        //printf("%d\tTCP Stream\tcmd: %d, \tLength: %d\n", i, buf[0], n);
         if(i==0)
         {
            if(buf[0]==135)
            {
-               for(int j=0;j<n;j++)
-                   printf("%c", (char)(buf[j]));
-               //response
                unsigned char response[] = {0x87, 0x6b, 0x9d, 0x98, 0x40, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x01, 0x30};
                size_t n_w = write(s, (char*)response, 14);
-               printf("Response:\t%d\n", (int)n_w);
+               //printf("Response:\t%d\n", (int)n_w);
+               *size = n;
+               memcpy((void*)content_buf, (void*)buf, n);
+               break;
            }
-            printf("\n");
         }
         i++;
     }
-    *size = 1;
-    return (void*)buf;
+    return (void*)content_buf;
 }
 
 void * getHTTPResponse(int s, int * size)
@@ -602,9 +603,9 @@ bool NetTcpServer::get_message(std::string &msg)
         int n_http = 0;
         char *p_http_response = (char *) getTcpStream(sockfd, &n_http);
         if(n_http>0)
-            msg = "A";//p_http_response;
-        /*if(p_http_response)
-            free(p_http_response);*/
+            msg = p_http_response;
+        if(p_http_response)
+            free(p_http_response);
         close(sockfd);
         client[i].fd = -1;
         break;

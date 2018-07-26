@@ -13,19 +13,10 @@ int main()
         {
             length = msg.length();
             printf("Got message with length:\t%d\n", length);
- /*           char filename[128];
-            sprintf(filename, "tcp_%d.bin", length);
-            FILE *fid;
-            fid = fopen(filename,"wb");
-            if(fid == NULL)
-            {
-                printf("写出文件出错");
-            }
-            
-            fwrite(msg.c_str(), length, 1, fid);
-            
-            fclose(fid);
-  */
+            std::cout << msg << std::endl;
+            for(int i = 0;i<length;i++)
+                printf("%02x ", (unsigned char)(msg[i]));
+            std::cout << std::endl;
         }
  
         usleep(1000);

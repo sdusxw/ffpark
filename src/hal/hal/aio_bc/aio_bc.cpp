@@ -21,6 +21,9 @@ NetTcpServer tcp_server_5232;   //蓝卡设备识别结果接收器
 std::string plate_channel_a;
 long ts_channel_a;
 
+bool control_bc_lcd(std::string json_msg, std::string led_ip);
+std::string compose_out_temp_paid();
+
 /*
  * 智能机初始化
  * 1. 初始化相机
@@ -107,6 +110,8 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
 	std::string camera_ip = "";
     std::string message;
     
+    bool b_say_goodbye = false;
+    
     unsigned char open_in[] = {0x14, 0x6b, 0x9d, 0x98, 0x40, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x02, 0x25};
     unsigned char open_out[] ={0x14, 0x6b, 0x9d, 0x98, 0x76, 0x49, 0x50, 0x52, 0x54, 0x01, 0x00, 0x01, 0x02, 0x25};
     
@@ -115,10 +120,11 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
         camera_ip = "192.168.1.101";//g_machine.channel_a.main_camera.device_ip_id;
         message = std::string((const char *)open_in, 14);
 	}
-	else
+	else    //出口
 	{
 		camera_ip = "192.168.1.103";//g_machine.channel_b.main_camera.device_ip_id;
         message = std::string((const char *)open_out, 14);
+        b_say_goodbye = true;
 	}
 	if (tcp_client.connect_server(camera_ip, 5231))
 	{
@@ -158,6 +164,10 @@ bool aio_open_door(std::string channel_id, std::string in_out, std::string flag)
             }
 		}
 	}
+    if (b_say_goodbye) {
+        std::string json_msg = compose_out_temp_paid();
+        control_bc_lcd(json_msg, camera_ip);
+    }
 	return true;
 }
 
@@ -271,6 +281,15 @@ std::string compose_out_temp(std::string plate, std::string duration, std::strin
     json_keys.append(json_key);
     
     json_lcd_show["Key"] = json_keys;
+    json_lcd_show["Voice"] = "请微信扫码 谢谢配合";
+    return json_lcd_show.toStyledString();
+}
+
+std::string compose_out_temp_paid()
+{
+    Json::Value json_lcd_show;
+    json_lcd_show["Page"] = "out_temp_payed.html";
+    json_lcd_show["Voice"] = "祝您出入平安";
     return json_lcd_show.toStyledString();
 }
 
@@ -279,6 +298,7 @@ std::string compose_in_temp(std::string plate)
     Json::Value json_lcd_show;
     Json::Value json_key, json_keys;
     json_lcd_show["Page"] = "in_temp_car.html";
+    json_lcd_show["Voice"] = "请您谨慎驾驶 减速慢行 车头向外 停车入位";
     
     json_key["Name"] = "BCA_TEXT_PLATE";
     json_key["Type"] = 0;

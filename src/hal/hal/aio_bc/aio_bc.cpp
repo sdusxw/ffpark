@@ -399,6 +399,8 @@ void aio_send_car_come_a()
 	{
 		log_output(car_come_msg);
 		log_output("推送A通道车辆信息成功");
+        plate_channel_a = aio_channel_a_main_vehicle.plate;
+        ts_channel_a = get_unix_ts();
 	}
 	else
 	{

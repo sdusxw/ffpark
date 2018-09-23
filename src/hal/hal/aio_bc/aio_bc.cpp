@@ -257,7 +257,7 @@ std::string compose_out_temp(std::string plate, std::string duration, std::strin
     json_lcd_show["Page"] = "out_temp_car.html";
     json_key["Name"] = Json::Value("BCA_IMG_QRCODE");
     json_key["Type"] = 0;
-    json_key["Data"] = "http://ipark.sdboon.com/slyy/out.php?park_id=0531000008&box_ip=192.168.1.201";
+    json_key["Data"] = "http://ipark.sdboon.com/jnslyy/out.php?park_id=0531000008&box_ip=192.168.1.201";
     json_keys.append(json_key);
     
     json_key["Name"] = "BCA_TEXT_PLATE";

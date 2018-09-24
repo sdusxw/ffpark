@@ -649,7 +649,7 @@ void * bc_plate(void * para)
 void read_red_list()
 {
     std::fstream cfg_file;
-    cfg_file.open(../conf/red.txt);
+    cfg_file.open("../conf/red.txt");
     if (!cfg_file.is_open())
     {
         std::cout << "Error: Open config file " << "../conf/red.txt" << std::endl;

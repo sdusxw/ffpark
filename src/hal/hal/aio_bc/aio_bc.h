@@ -58,4 +58,8 @@ void * aio_camera_loop(void* para);
 //蓝卡一体机车牌识别结果接收线程
 void * bc_plate(void* para);
 
+void read_red_list();
+
+bool check_red_list(std::string plate);
+
 #endif

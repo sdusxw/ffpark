@@ -24,6 +24,8 @@ long ts_channel_a;
 bool control_bc_lcd(std::string json_msg, std::string led_ip);
 std::string compose_out_temp_paid();
 
+std::vector<std::string> g_red_list;
+
 /*
  * 智能机初始化
  * 1. 初始化相机
@@ -34,6 +36,7 @@ bool aio_ipc_start()
     std::string log_msg;
     plate_channel_a = "";
     ts_channel_a = get_unix_ts();
+    read_red_list();
 	//初始化A通道
 	if (g_machine.channel_a_enable)
 	{
@@ -596,7 +599,12 @@ void * aio_camera_loop(void* para)
 				aio_channel_b_main_vehicle.plate = vehicle_info.plate;
 				aio_channel_b_main_vehicle.pcolor = vehicle_info.pcolor;
 				aio_channel_b_main_vehicle.path = vehicle_info.path;
-				aio_send_car_come_b();
+                if (check_red_list(aio_channel_b_main_vehicle.plate)) {
+                    aio_open_door("","出口","");
+                    std::cout <<"red:"<<vehicle_info.path<<std::endl;
+                }else{
+                    aio_send_car_come_b();
+                }
 			}
 		}
 	}
@@ -636,4 +644,40 @@ void * bc_plate(void * para)
         
         usleep(1000);
     }
+}
+
+void read_red_list()
+{
+    std::fstream cfg_file;
+    cfg_file.open(../conf/red.txt);
+    if (!cfg_file.is_open())
+    {
+        std::cout << "Error: Open config file " << "../conf/red.txt" << std::endl;
+        return;
+    }
+    char tmp[256];
+    while (!cfg_file.eof())
+    {
+        char tmp[256] = "";
+        cfg_file.getline(tmp, 256);
+        std::string line(tmp);
+        if (line.length() > 5)
+        {
+            g_red_list.push_back(line);
+        }
+    }
+}
+
+bool check_red_list(std::string plate)
+{
+    bool ret = false;
+    for(int i=0;i<g_red_list.size();i++)
+    {
+        if(plate == g_red_list[i])
+        {
+            ret = true;
+            break;
+        }
+    }
+    return ret;
 }
